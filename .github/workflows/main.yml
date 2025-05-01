@@ -31,7 +31,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: |
-            org.opencontainers.image.source = "https://github.com/${{ env.IMAGE_NAME }}"
+            org.opencontainers.image.source=https://github.com/${{ env.IMAGE_NAME }}
 
 
 
