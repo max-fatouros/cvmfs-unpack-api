@@ -30,8 +30,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          # labels: |
-          #   org.opencontainers.image.source=https://github.com/${{ env.IMAGE_NAME }}
 
 
 
@@ -41,5 +39,4 @@ jobs:
           context: test-image
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          # labels: ${{ steps.meta.outputs.labels }}
-          labels: org.opencontainers.image.source=https://github.com/${{ env.IMAGE_NAME }}
+          labels: ${{ steps.meta.outputs.labels }}
