@@ -2,8 +2,6 @@
 
 This repository unpacks (unzips) and syncs (pushes) container images to a [Cern Virtual Machine File System (CVMFS)](https://cvmfs.readthedocs.io/en/stable/) repository using the [Daemon that Unpacks Container Images into CernVM-FS (DUCC)](https://cvmfs.readthedocs.io/en/stable/cpt-ducc.html).
 
-[TOC]
-
 ## Introduction
 
 CVMFS handles distributing software (including container images) to users.
