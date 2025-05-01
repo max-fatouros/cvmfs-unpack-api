@@ -98,6 +98,50 @@ notify_ducc_test-image:
 
 
 #### Github Action
+To see how we build, push, and unpack a [`test-image/`](test-image), see [`.github/workflows/main.yml`](.github/workflows/main.yml).
+
+Otherwise, copy this to your GitHub action.
+``` yaml
+name: test-image
+
+on:
+  push:
+
+env:
+  REGISTRY: ghcr.io
+  REPOSITORY: ${{ github.repository }}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
+
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+```
 
 
 ### On-Demand Unpacking from an HTTP-Request
