@@ -46,6 +46,8 @@ To register an image for periodic unpacking, add an image to the [`recipe.yaml`]
 
 
 #### GitLab CI
+> **NOTE**  The CI files we include are only available from gitlab.cern.ch
+
 To see how we build, push, and unpack a [`test-image/`](test-image), see [`test-image/.gitlab-ci.yml`](test-image/.gitlab-ci.yml).
 
 Otherwise, copy this to your GitLab CI
