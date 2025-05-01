@@ -7,11 +7,18 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/test-image
+  REPOSITORY: ${{ github.repository }}
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - context: test-image
+          - context: unpack-api
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,14 +36,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/${{ matrix.context }}
 
 
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: test-image
+          context: ${{ matrix.context }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
