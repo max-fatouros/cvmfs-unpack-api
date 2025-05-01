@@ -30,7 +30,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          labels: org.opencontainers.image.source = "https://github.com/${{ env.IMAGE_NAME }}"
+          labels: |
+            org.opencontainers.image.source = "https://github.com/${{ env.IMAGE_NAME }}"
 
 
 
