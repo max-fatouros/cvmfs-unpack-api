@@ -1,0 +1,60 @@
+include:
+  - project: 'ci-tools/container-image-ci-templates'
+    file: 'kaniko-image.gitlab-ci.yml'
+  - 'test-image/.gitlab-ci.yml'
+
+stages:
+  - build
+  - notify
+  - sync
+  - webhook-sync
+
+variables:
+  IMAGE_UNPACK_API: "${CI_REGISTRY_IMAGE}/unpack-api:${CI_COMMIT_SHORT_SHA}"
+  FF_SCRIPT_SECTIONS: "true"  # GitLab flag to print multiline scripts in logs without clipping.
+
+
+build_and_push_unpack-api:
+  stage: build
+  extends: .build_kaniko
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - unpack-api/**/*
+  tags:  # overrides the tags of .build_kaniko
+    - docker
+  variables:
+    REGISTRY_IMAGE_PATH: "${IMAGE_UNPACK_API}"
+    PUSH_IMAGE: "true"
+    CONTEXT_DIR: 'unpack-api'  # context of the build directory. Only for kaniko.
+    EXTRA_TAGS: 'latest'
+
+sync:
+  stage: sync
+  script:
+    - "sudo systemctl stop autofs"
+    - "sudo cvmfs_ducc convert recipe.yaml --skip-podman --skip-thin-image"
+  rules:
+    - if: $CI_PIPELINE_TRIGGERED
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  resource_group: ducc
+  tags:
+    - cvmfs-server
+    - shell
+
+webhook-sync:
+  stage: webhook-sync
+  script:
+    - sudo systemctl stop autofs
+    - export DUCC_GITLAB_IDENT=$CI_REGISTRY
+    - export DUCC_GITLAB_USER=$CI_REGISTRY_USER
+    - export DUCC_GITLAB_PASS=$CI_REGISTRY_PASSWORD
+    - export DUCC_AUTH_REGISTRIES=GITLAB
+    - sudo --preserve-env cvmfs_ducc convert-single-image "https://${IMAGE}" testing.psi.ch --skip-podman --skip-thin-image
+  rules:
+    - if: $CI_PIPELINE_TRIGGERED
+  resource_group: ducc
+  tags:
+    - cvmfs-server
+    - shell

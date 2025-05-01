@@ -1,0 +1,11 @@
+version: 1
+cvmfs_repo: testing.psi.ch
+input:
+  - 'https://registry.hub.docker.com/library/python:3.8'
+  - 'https://registry.cern.ch/snapshotter-benchmarks/constant-file-size:*'
+  - 'https://registry.cern.ch/snapshotter-benchmarks/constant-layer-size:*'
+  # - 'https://registry.hub.docker.com/rootproject/root:latest'
+  # - 'https://registry.hub.docker.com/rootproject/root:6.32.02-ubuntu24.04'
+  # - 'https://registry.hub.docker.com/rootproject/root:6.32.00-ubuntu24.04'
+  # - 'https://registry.hub.docker.com/library/tensorflow/tensorflow:latest'
+  # - 'https://registry.hub.docker.com/ubuntu:20.04'

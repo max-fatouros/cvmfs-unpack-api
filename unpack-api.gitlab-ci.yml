@@ -1,0 +1,22 @@
+variables:
+  IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+  AUTHENTICATION_SERVER: 0.0.0.0
+  EXTRA_TAGS: ""
+
+
+.notify_ducc:
+  id_tokens:
+    MY_JOB_JWT:
+      aud: ltpord01
+  script:
+    - 'IMAGE_WITHOUT_TAG=$(echo ${IMAGE} | cut -d : -f 1)'
+    - 'TAGS=$(echo ${IMAGE} | cut -d : -f 2)'
+    - 'TAGS="${TAGS} ${EXTRA_TAGS}"'
+
+    - |
+      for tag in $TAGS; do
+        FULL_IMAGE="${IMAGE_WITHOUT_TAG}:${tag}"
+        curl -X "POST" \
+             -H "Authorization:${MY_JOB_JWT}" \
+             "${AUTHENTICATION_SERVER}:8000/api/sync/jwt?image=${FULL_IMAGE}"
+      done

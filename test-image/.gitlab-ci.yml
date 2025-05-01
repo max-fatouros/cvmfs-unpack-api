@@ -1,0 +1,44 @@
+include:
+  - project: 'ci-tools/container-image-ci-templates'
+    file: 'kaniko-image.gitlab-ci.yml'
+  - project: 'mfatouro/unpack-to-cvmfs'
+    file: 'unpack-api.gitlab-ci.yml'
+
+
+stages:
+  - build
+  - notify
+
+
+variables:
+  IMAGE_TEST_IMAGE: "${CI_REGISTRY_IMAGE}/test-image:${CI_COMMIT_SHORT_SHA}"
+
+
+build_and_push_test-image:
+  stage: build
+  extends: .build_kaniko
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+  tags:  # overrides the tags of .build_kaniko
+    - docker
+  variables:
+    REGISTRY_IMAGE_PATH: "${IMAGE_TEST_IMAGE}"
+    PUSH_IMAGE: "true"
+    # context of the build directory. Only for kaniko.
+    # This is only necessary because this image is in a subdirectory.
+    CONTEXT_DIR: 'test-image'
+
+
+
+notify_ducc_test-image:
+  stage: notify
+  extends: .notify_ducc
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+  tags:
+    - shell
+    - authentication-server
+  variables:
+    IMAGE: "${IMAGE_UNPACK_API}"
+    EXTRA_TAGS: 'latest'
+    AUTHENTICATION_SERVER: 0.0.0.0
