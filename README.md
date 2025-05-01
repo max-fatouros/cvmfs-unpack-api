@@ -42,9 +42,61 @@ Users can request to have their images unpacked to a CVMFS repository in one of 
 
 To register an image for periodic unpacking, add an image to the [`recipe.yaml`](recipe.yaml) following the syntax described [here](https://cvmfs.readthedocs.io/en/stable/cpt-containers.html#image-wishlist-syntax).
 
-### On-Demand Unpacking from a GitLab CI
+### On-Demand Unpacking from a GitLab CI / GitHub Action
 
-Please refer to the [`test-image`](test-image) directory for a complete example of how to have an image built in a GitLab CI, then synced immediately to a CVMFS repository.
+
+#### GitLab CI
+To see how we build, push, and unpack a [`test-image/`](test-image), see [`test-image/.gitlab-ci.yml`](test-image/.gitlab-ci.yml).
+
+Otherwise, copy this to your GitLab CI
+
+``` yaml
+include:
+  - project: 'ci-tools/container-image-ci-templates'
+    file: 'kaniko-image.gitlab-ci.yml'
+  - project: 'mfatouro/unpack-to-cvmfs'
+    file: 'unpack-api.gitlab-ci.yml'
+
+
+stages:
+  - build
+  - notify
+
+
+variables:
+  IMAGE_TEST_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+
+
+build_and_push_test-image:
+  stage: build
+  extends: .build_kaniko
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+  tags:  # overrides the tags of .build_kaniko
+    - docker
+  variables:
+    REGISTRY_IMAGE_PATH: "${IMAGE_TEST_IMAGE}"
+    PUSH_IMAGE: "true"
+
+
+notify_ducc_test-image:
+  stage: notify
+  extends: .notify_ducc
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+  tags:
+    - shell
+    - authentication-server
+  variables:
+    IMAGE: "${IMAGE_UNPACK_API}"
+    EXTRA_TAGS: 'latest'
+    AUTHENTICATION_SERVER: 0.0.0.0
+
+```
+
+
+#### Github Action
+
 
 ### On-Demand Unpacking from an HTTP-Request
 
