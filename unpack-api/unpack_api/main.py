@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Annotated
 
@@ -9,8 +10,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.security import HTTPBearer
-
-import json
 
 
 load_dotenv()
@@ -30,14 +29,12 @@ GITLAB_TOKEN = os.getenv('GITLAB_TOKEN')
 # <<<
 
 
-
 def get_expose_api_map():
     expose_api = {
         'gitlab': False,
         'github': False,
         'secret': False,
     }
-
 
     if None not in (
         GITLAB_SERVER,
@@ -53,11 +50,11 @@ def get_expose_api_map():
     ):
         expose_api['github'] = True
 
-
     if SECRET_TOKEN is not None:
         expose_api['secret'] = True
 
     return expose_api
+
 
 def get_jwt_keys():
     gitlab_server_url = f'{GITLAB_SERVER}/oauth/discovery/keys'
@@ -89,6 +86,7 @@ def request_gitlab_sync(image):
             detail=f'Token server error: {request.text}',
         )
 
+
 def request_github_sync(image):
     """
     https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
@@ -100,14 +98,14 @@ def request_github_sync(image):
         data=json.dumps({
             'ref': 'action-testing',
             'inputs': {
-                'image': image
-            }
+                'image': image,
+            },
         }),
         headers={
-            'Accept': "application/vnd.github+json",
+            'Accept': 'application/vnd.github+json',
             'Authorization': f'Bearer {GITHUB_TOKEN}',
             'X-GitHub-Api-Version': '2022-11-28',
-        }
+        },
     )
 
     from pprint import pprint
@@ -131,11 +129,6 @@ def check_authorization(
             status_code=401,
             detail='No Authorization header provided',
         )
-
-
-
-
-
 
 
 app = FastAPI()
@@ -184,7 +177,6 @@ if expose_api['gitlab']:
         request_gitlab_sync(image)
 
 
-
 if expose_api['secret'] and expose_api['gitlab']:
     @app.post('/api/gitlab/sync/secret')
     def sync_secret(
@@ -201,8 +193,6 @@ if expose_api['secret'] and expose_api['gitlab']:
             )
 
         request_gitlab_sync(image)
-
-
 
 
 if expose_api['secret'] and expose_api['github']:
