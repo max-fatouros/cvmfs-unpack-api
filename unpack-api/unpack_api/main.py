@@ -7,8 +7,9 @@ from authlib.jose.errors import BadSignatureError
 from authlib.jose.errors import DecodeError
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi import Header
 from fastapi import HTTPException
+from fastapi.security import HTTPBearer
+
 import json
 
 
@@ -61,8 +62,8 @@ def get_expose_api_map():
 def get_jwt_keys():
     gitlab_server_url = f'{GITLAB_SERVER}/oauth/discovery/keys'
 
-    request_jwt = requests.get(gitlab_server_url)
-    request_jwt.raise_for_status()
+    request_jwk = requests.get(gitlab_server_url)
+    request_jwk.raise_for_status()
 
     jwk = request_jwk.json()
     jwks_keys = jwk['keys']
@@ -123,7 +124,7 @@ def request_github_sync(image):
 
 
 def check_authorization(
-    authorization: Annotated[str | None, Header()],
+    authorization: Annotated[str | None, HTTPBearer()],
 ):
     if not authorization:
         raise HTTPException(
@@ -154,7 +155,7 @@ def root():
 if expose_api['gitlab']:
     @app.post('/api/gitlab/sync/jwt')
     def sync_jwt(
-        authorization: Annotated[str | None, Header()] = None,
+        authorization: Annotated[str | None, HTTPBearer()] = None,
         image: str | None = None,
     ):
 
@@ -187,7 +188,7 @@ if expose_api['gitlab']:
 if expose_api['secret'] and expose_api['gitlab']:
     @app.post('/api/gitlab/sync/secret')
     def sync_secret(
-            authorization: Annotated[str | None, Header()] = None,
+            authorization: Annotated[str | None, HTTPBearer()] = None,
             image: str | None = None,
     ):
 
@@ -207,7 +208,7 @@ if expose_api['secret'] and expose_api['gitlab']:
 if expose_api['secret'] and expose_api['github']:
     @app.post('/api/github/sync/secret')
     def sync_secret(
-            authorization: Annotated[str | None, Header()] = None,
+            authorization: Annotated[str | None, HTTPBearer()] = None,
             image: str | None = None,
     ):
 
