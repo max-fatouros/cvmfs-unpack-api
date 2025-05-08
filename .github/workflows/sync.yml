@@ -1,9 +1,6 @@
-name: sync
-
 on:
-  workflow_dispatch:
-    branches:
-      - main
+  - push
+  - workflow_dispatch
 
 jobs:
   sync:
