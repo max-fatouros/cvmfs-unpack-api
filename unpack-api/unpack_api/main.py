@@ -56,10 +56,8 @@ def get_expose_api_map():
     return expose_api
 
 
-def get_jwt_keys():
-    gitlab_server_url = f'{GITLAB_SERVER}/oauth/discovery/keys'
-
-    request_jwk = requests.get(gitlab_server_url)
+def get_jwt_keys(jwt_server_url):
+    request_jwk = requests.get(jwt_server_url)
     request_jwk.raise_for_status()
 
     jwk = request_jwk.json()
@@ -93,7 +91,7 @@ def request_github_sync(image):
     """
     request = requests.post(
         url=(
-            f'https://api.github.com/repos/{GITHUB_REPO}/actions/workflows/{GITHUB_WORKFLOW}/dispatches'
+            f'https://api.github.com/repos/{GITHUB_REPO}/actions/workflows/{GITHUB_WORKFLOW}/dispatches'  # noqa
         ),
         data=json.dumps({
             'ref': 'action-testing',
@@ -135,9 +133,18 @@ app = FastAPI()
 
 expose_api = get_expose_api_map()
 
-jwks_keys = None
+gitlab_jwks_keys = None
 if expose_api['gitlab']:
-    jwks_keys = get_jwt_keys()
+    gitlab_jwks_keys = get_jwt_keys(
+        f'{GITLAB_SERVER}/oauth/discovery/keys',
+    )
+
+
+github_jwks_keys = None
+if expose_api['github']:
+    github_jwks_keys = get_jwt_keys(
+        'https://token.actions.githubusercontent.com/.well-known/jwks',
+    )
 
 
 @app.get('/')
@@ -147,7 +154,7 @@ def root():
 
 if expose_api['gitlab']:
     @app.post('/api/gitlab/sync/jwt')
-    def sync_jwt(
+    def gitlab_sync_jwt(
         authorization: Annotated[str | None, HTTPBearer()] = None,
         image: str | None = None,
     ):
@@ -156,7 +163,7 @@ if expose_api['gitlab']:
         try:
             claims = jwt.decode(
                 authorization,
-                jwks_keys,
+                gitlab_jwks_keys,
             )
         except DecodeError:
             raise HTTPException(
@@ -177,9 +184,41 @@ if expose_api['gitlab']:
         request_gitlab_sync(image)
 
 
+if expose_api['github']:
+    @app.post('/api/github/sync/jwt')
+    def github_sync_jwt(
+        authorization: Annotated[str | None, HTTPBearer()] = None,
+        image: str | None = None,
+    ):
+
+        check_authorization(authorization)
+        try:
+            claims = jwt.decode(
+                authorization,
+                github_jwks_keys,
+            )
+        except DecodeError:
+            raise HTTPException(
+                status_code=403,
+                detail='Invalid token: DecodeError',
+            )
+        except BadSignatureError:
+            raise HTTPException(
+                status_code=403,
+                detail='Invalid token: BadSignatureError',
+            )
+        if claims['iss'] != 'https://github.com':
+            raise HTTPException(
+                status_code=403,
+                detail=f"Invalid issuer {claims['iss']}",
+            )
+
+        request_gitlab_sync(image)
+
+
 if expose_api['secret'] and expose_api['gitlab']:
     @app.post('/api/gitlab/sync/secret')
-    def sync_secret(
+    def gitlab_sync_secret(
             authorization: Annotated[str | None, HTTPBearer()] = None,
             image: str | None = None,
     ):
@@ -197,7 +236,7 @@ if expose_api['secret'] and expose_api['gitlab']:
 
 if expose_api['secret'] and expose_api['github']:
     @app.post('/api/github/sync/secret')
-    def sync_secret(
+    def github_sync_secret(
             authorization: Annotated[str | None, HTTPBearer()] = None,
             image: str | None = None,
     ):
