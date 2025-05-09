@@ -201,7 +201,7 @@ if expose_api['github']:
                 status_code=403,
                 detail='Invalid token: BadSignatureError',
             )
-        if claims['iss'] != 'https://github.com':
+        if claims['iss'] != 'https://token.actions.githubusercontent.com':
             raise HTTPException(
                 status_code=403,
                 detail=f"Invalid issuer {claims['iss']}",
