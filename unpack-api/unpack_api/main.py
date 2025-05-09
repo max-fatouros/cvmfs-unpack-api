@@ -106,12 +106,6 @@ def request_github_sync(image):
         },
     )
 
-    from pprint import pprint
-    pprint(request.request.url)
-    pprint(request.request.url)
-    pprint(request.request.body)
-    pprint(request.request.headers)
-
     if request.status_code != 200:
         raise HTTPException(
             status_code=request.status_code,
