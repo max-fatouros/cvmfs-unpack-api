@@ -95,9 +95,9 @@ def request_github_sync(image):
         ),
         data=json.dumps({
             'ref': 'action-testing',
-            'inputs': {
-                'image': image,
-            },
+            # 'inputs': {
+            #     'image': image,
+            # },
         }),
         headers={
             'Accept': 'application/vnd.github+json',
