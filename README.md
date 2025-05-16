@@ -67,15 +67,14 @@ To see how we build, push, and unpack a [`test-image/`](test-image), see [`test-
 Otherwise, copy the contents of this `main.yml` file to your GitLab CI
 
 <details>
-<summary> <code>main.yml</code></summary>
+<summary> <code>.gitlab-ci.yml</code></summary>
 
 ```yaml
 include:
-  - project: 'ci-tools/container-image-ci-templates'
+  - project: 'https://gitlab.cern.ch/ci-tools/container-image-ci-templates'
     file: 'kaniko-image.gitlab-ci.yml'
-  - project: 'mfatouro/unpack-to-cvmfs'
-    file: 'unpack-api.gitlab-ci.yml'
-
+  - project: 'https://gitlab.cern.ch/mfatouro/unpack-to-cvmfs'
+    file: 'test-image/.gitlab-ci.yml'
 
 stages:
   - build
@@ -83,10 +82,10 @@ stages:
 
 
 variables:
-  IMAGE_TEST_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+  IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
 
 
-build_and_push_test-image:
+build_and_push:
   stage: build
   extends: .build_kaniko
   rules:
@@ -94,11 +93,11 @@ build_and_push_test-image:
   tags:  # overrides the tags of .build_kaniko
     - docker
   variables:
-    REGISTRY_IMAGE_PATH: "${IMAGE_TEST_IMAGE}"
+    REGISTRY_IMAGE_PATH: "${IMAGE}"
     PUSH_IMAGE: "true"
 
 
-notify_ducc_test-image:
+notify_ducc:
   stage: notify
   extends: .notify_ducc
   rules:
@@ -107,7 +106,7 @@ notify_ducc_test-image:
     - shell
     - authentication-server
   variables:
-    IMAGE: "${IMAGE_UNPACK_API}"
+    IMAGE: "${IMAGE}"
     EXTRA_TAGS: 'latest'
     AUTHENTICATION_SERVER: 0.0.0.0
 ```
