@@ -44,15 +44,18 @@ To register an image for periodic unpacking, add an image to the [`recipe.yaml`]
 
 ### On-Demand Unpacking from a GitLab CI / GitHub Action
 
-
 #### GitLab CI
-> **NOTE**  The CI files we include are only available from gitlab.cern.ch
+
+> **NOTE** The CI files we include are only available from gitlab.cern.ch
 
 To see how we build, push, and unpack a [`test-image/`](test-image), see [`test-image/.gitlab-ci.yml`](test-image/.gitlab-ci.yml).
 
-Otherwise, copy this to your GitLab CI
+Otherwise, copy the contents of this `main.yml` file to your GitLab CI
 
-``` yaml
+<details>
+<summary> <code>main.yml</code></summary>
+
+```yaml
 include:
   - project: 'ci-tools/container-image-ci-templates'
     file: 'kaniko-image.gitlab-ci.yml'
@@ -93,12 +96,11 @@ notify_ducc_test-image:
     IMAGE: "${IMAGE_UNPACK_API}"
     EXTRA_TAGS: 'latest'
     AUTHENTICATION_SERVER: 0.0.0.0
-
 ```
 
+</details>
 
 #### Github Action
-
 
 ### On-Demand Unpacking from an HTTP-Request
 
