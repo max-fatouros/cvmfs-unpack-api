@@ -2,6 +2,20 @@
 
 This repository unpacks (unzips) and syncs (pushes) container images to a [Cern Virtual Machine File System (CVMFS)](https://cvmfs.readthedocs.io/en/stable/) repository using the [Daemon that Unpacks Container Images into CernVM-FS (DUCC)](https://cvmfs.readthedocs.io/en/stable/cpt-ducc.html).
 
+> **NOTE**
+> This repository is a template. An instance of it can be configured to synchronize a CVMFS repository of your choosing.
+>
+> Instruction on how to setup this repository are found in the [Configuring this Repository](#configuring-this-repository) section.
+>
+> Once this template has been instantiated
+>
+> - [ ] Delete the [Configuring this Repository](#configuring-this-repository) section.
+> - [ ] Customize this `README.md` with any relavent information for the users.
+> - [ ] Delete this note. (not the one below please)
+
+> **NOTE** This repository was created from a template.
+> If you would like to make an instance of your own CVMFS unpacking repository, please [create a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) or copy from https://github.com/cvmfs-contrib/cvmfs-unpack-api
+
 ## Introduction
 
 CVMFS handles distributing software (including container images) to users.
@@ -130,7 +144,18 @@ where
 - `<image>` is the full image name to be unpacked.
   - e.g. gitlab-registry.cern.ch/mfatouro/unpack-to-cvmfs/test-image:latest
 
+## Terminology
+
+- **CI**: Continuous Integration.
+- **CVMFS:** Cern Virtual Machine File System.
+- **Container Image:** A term that includes, but is not limited to, a docker image.
+- **DUCC:** Daemon that Unpacks Container Images into CernVM-FS
+- **Sync:** Push an unzipped container image to a CVMFS repository.
+- **Unpack:** Unzip a container image.
+
 ## Configuring this Repository
+
+> **NOTE** Relevant for administrators only
 
 On the machine running the CVMFS server, add the following to `/etc/sudoers.d/cvmfs_ducc`
 
@@ -140,12 +165,3 @@ gitlab-runner ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop autofs
 ```
 
 So that the commands can be ran from the GitLab CI without a sudo password.
-
-## Terminology
-
-- **CI**: Continuous Integration.
-- **CVMFS:** Cern Virtual Machine File System.
-- **Container Image:** A term that includes, but is not limited to, a docker image.
-- **DUCC:** Daemon that Unpacks Container Images into CernVM-FS
-- **Sync:** Push an unzipped container image to a CVMFS repository.
-- **Unpack:** Unzip a container image.
