@@ -1,7 +1,8 @@
 include:
-  - project: 'ci-tools/container-image-ci-templates'
+  - project: 'https://gitlab.cern.ch/ci-tools/container-image-ci-templates'
     file: 'kaniko-image.gitlab-ci.yml'
-  - 'test-image/.gitlab-ci.yml'
+  - project: 'https://gitlab.cern.ch/mfatouro/unpack-to-cvmfs'
+    file: 'test-image/.gitlab-ci.yml'
 
 stages:
   - build
