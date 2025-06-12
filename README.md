@@ -52,11 +52,11 @@ This can be done immediately after building and pushing that image to an image-r
 
 Users can request to have their images unpacked to a CVMFS repository in one of three ways. Each method is independent of one another, and users can choose multiple methods if they wish.
 
-### Scheduled Unpacking
+### Method 1: Scheduled Unpacking
 
 To register an image for periodic unpacking, add an image to the [`recipe.yaml`](recipe.yaml) following the syntax described [here](https://cvmfs.readthedocs.io/en/stable/cpt-containers.html#image-wishlist-syntax).
 
-### On-Demand Unpacking from a GitLab CI / GitHub Action
+### Method 2: On-Demand Unpacking from a GitLab CI / GitHub Action
 
 #### GitLab CI
 
@@ -64,7 +64,7 @@ To register an image for periodic unpacking, add an image to the [`recipe.yaml`]
 
 To see how we build, push, and unpack a [`test-image/`](test-image), see [`test-image/.gitlab-ci.yml`](test-image/.gitlab-ci.yml).
 
-Otherwise, copy the contents of this `main.yml` file to your GitLab CI
+Otherwise, copy the contents of the `main.yml` file in the drawer below to your GitLab CI.
 
 <details>
 <summary> <code>.gitlab-ci.yml</code></summary>
@@ -115,7 +115,7 @@ notify_ducc:
 
 #### Github Action
 
-### On-Demand Unpacking from an HTTP-Request
+### Method 3: On-Demand Unpacking from an HTTP-Request
 
 Apart from being called from a GitLab CI, the `unpack-api` server api can also be called from an http-request.
 
