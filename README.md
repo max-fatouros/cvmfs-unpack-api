@@ -5,7 +5,7 @@ This repository unpacks (unzips) and syncs (pushes) container images to a [Cern 
 > **NOTE**
 > This repository is a template. An instance of it can be configured to synchronize a CVMFS repository of your choosing.
 >
-> Instruction on how to setup this repository are found in the [Configuring this Repository](#configuring-this-repository) section.
+> Instruction on how to set up this repository are found in the [Configuring this Repository](#configuring-this-repository) section.
 >
 > Once this template has been instantiated
 >
