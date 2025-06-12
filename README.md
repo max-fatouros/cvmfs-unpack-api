@@ -64,7 +64,7 @@ To register an image for periodic unpacking, add an image to the [`recipe.yaml`]
 
 To see how we build, push, and unpack a [`test-image/`](test-image), see [`test-image/.gitlab-ci.yml`](test-image/.gitlab-ci.yml).
 
-Otherwise, copy the contents of the `main.yml` file in the drawer below to your GitLab CI.
+Otherwise, copy the contents of the `.gitlab-ci.yml` file in the drawer below to your GitLab CI.
 
 <details>
 <summary> <code>.gitlab-ci.yml</code></summary>
@@ -148,7 +148,7 @@ where
 - **CI**: Continuous Integration.
 - **CVMFS:** Cern Virtual Machine File System.
 - **Container Image:** A term that includes, but is not limited to, a Docker image.
-- **DUCC:** Daemon that Unpacks Container Images into CernVM-FS
+- **DUCC:** Daemon that Unpacks Container Images into CernVM-FS.
 - **Sync:** Push an unzipped container image to a CVMFS repository.
 - **Unpack:** Unzip a container image.
 - **Workflow:** Either a GitHub Action workflow, or a GitLab CI pipeline.
