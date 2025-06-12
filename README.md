@@ -151,6 +151,7 @@ where
 - **DUCC:** Daemon that Unpacks Container Images into CernVM-FS
 - **Sync:** Push an unzipped container image to a CVMFS repository.
 - **Unpack:** Unzip a container image.
+- **Workflow:** Either a GitHub Action workflow, or a GitLab CI pipeline.
 
 ## Configuring this Repository
 
