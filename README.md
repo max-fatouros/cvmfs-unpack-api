@@ -147,7 +147,7 @@ where
 
 - **CI**: Continuous Integration.
 - **CVMFS:** Cern Virtual Machine File System.
-- **Container Image:** A term that includes, but is not limited to, a docker image.
+- **Container Image:** A term that includes, but is not limited to, a Docker image.
 - **DUCC:** Daemon that Unpacks Container Images into CernVM-FS
 - **Sync:** Push an unzipped container image to a CVMFS repository.
 - **Unpack:** Unzip a container image.
