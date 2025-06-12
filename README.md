@@ -14,7 +14,7 @@ This repository unpacks (unzips) and syncs (pushes) container images to a [Cern 
 > - [ ] Delete this note. (not the one below please)
 
 > **NOTE** This repository was created from a template.
-> If you would like to make an instance of your own CVMFS unpacking repository, please [create a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) from&mdash;or copy from&mdash;the template repository: https://github.com/cvmfs-contrib/cvmfs-unpack-api
+> If you would like to make an instance of your own CVMFS unpacking repository, please [create a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) from—or copy from—the template repository: https://github.com/cvmfs-contrib/cvmfs-unpack-api
 
 ## Introduction
 
