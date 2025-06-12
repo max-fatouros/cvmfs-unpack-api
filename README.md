@@ -50,7 +50,7 @@ This can be done immediately after building and pushing that image to an image-r
 
 ## Usage
 
-Users can request to have their images unpacked to a CVMFS repository in one of three ways. Each method is independent of one another and users can choose multiple methods if they wish.
+Users can request to have their images unpacked to a CVMFS repository in one of three ways. Each method is independent of one another, and users can choose multiple methods if they wish.
 
 ### Scheduled Unpacking
 
