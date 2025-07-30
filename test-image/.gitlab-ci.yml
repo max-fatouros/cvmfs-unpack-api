@@ -1,7 +1,6 @@
 include:
   - 'https://gitlab.cern.ch/ci-tools/container-image-ci-templates/raw/master/kaniko-image.gitlab-ci.yml'
-  - project: 'mfatouro/unpack-to-cvmfs'
-    file: 'unpack-api.gitlab-ci.yml'
+  - 'unpack-api.gitlab-ci.yml'
 
 
 stages:
