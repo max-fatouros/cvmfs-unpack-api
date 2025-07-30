@@ -1,6 +1,5 @@
 include:
-  - project: 'ci-tools/container-image-ci-templates'
-    file: 'kaniko-image.gitlab-ci.yml'
+  - 'https://gitlab.cern.ch/ci-tools/container-image-ci-templates/raw/master/kaniko-image.gitlab-ci.yml'
   - project: 'mfatouro/unpack-to-cvmfs'
     file: 'unpack-api.gitlab-ci.yml'
 
@@ -19,8 +18,6 @@ build_and_push_test-image:
   extends: .build_kaniko
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
-  tags:  # overrides the tags of .build_kaniko
-    - docker
   variables:
     REGISTRY_IMAGE_PATH: "${IMAGE_TEST_IMAGE}"
     PUSH_IMAGE: "true"
