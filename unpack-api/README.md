@@ -1,13 +1,18 @@
 # Unpack API
 
+> **NOTE**
+>
+> This API works with both GitLab CI/CD Pipelines, and GitHub Actions workflows.
+> To keeps things simple, I'll refer to both simultaneously as a **workflow** in this document.
+
 This repository authenticates and forwards requests to unpack images into a CVMFS repository.
 
-This API accepts the name of an image to unpack along with a GitLab JWT token.
-This server then forwards that image, along with a pipeline trigger token, to another GitLab CI that performs the unpacking of the image into CVMFS.
+This API accepts the name of an image to unpack along with a workflow JWT token.
+This server then forwards that image, along with a pipeline trigger token, to another workflow that performs the unpacking of the image into CVMFS.
 
-1. Client sends request to this API from within a GitLab CI.
-1. This API authenticates the Client (ensures the pipeline was ran from within a specific GitLab instance).
-1. This API sends a request to a different GitLab CI to unpack the image.
+1. Client sends request to this API from within a workflow.
+1. This API authenticates the Client (ensures the pipeline was ran from within a specific GitLab/GitHub instance).
+1. This API sends a request to a different workflow to unpack the image.
 
 ## Install
 
