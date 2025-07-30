@@ -71,10 +71,7 @@ Otherwise, copy the contents of the `.gitlab-ci.yml` file in the drawer below to
 
 ```yaml
 include:
-  - project: 'https://gitlab.cern.ch/ci-tools/container-image-ci-templates'
-    file: 'kaniko-image.gitlab-ci.yml'
-  - project: 'https://gitlab.cern.ch/mfatouro/unpack-to-cvmfs'
-    file: 'test-image/.gitlab-ci.yml'
+  - 'https://gitlab.cern.ch/ci-tools/container-image-ci-templates/raw/master/kaniko-image.gitlab-ci.yml'
 
 stages:
   - build
@@ -90,8 +87,6 @@ build_and_push:
   extends: .build_kaniko
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
-  tags:  # overrides the tags of .build_kaniko
-    - docker
   variables:
     REGISTRY_IMAGE_PATH: "${IMAGE}"
     PUSH_IMAGE: "true"
