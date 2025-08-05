@@ -14,20 +14,6 @@ This server then forwards that image, along with a pipeline trigger token, to an
 1. This API authenticates the Client (ensures the pipeline was ran from within a specific GitLab/GitHub instance).
 1. This API sends a request to a different workflow to unpack the image.
 
-## Install
-
-Using podman (or docker), run
-
-```bash
-podman create -p 8000:8000 --env-file=.env --name unpack-api  gitlab-registry.cern.ch/mfatouro/unpack-to-cvmfs/unpack-api:latest
-```
-
-Otherwise, this package can be installed with
-
-```bash
-pip install .
-```
-
 ## Setup
 
 ### Configure
@@ -39,6 +25,20 @@ cp .env.sample .env
 ```
 
 Then open .env and set the values for your use case.
+
+## Install
+
+Using podman (or docker), run
+
+```bash
+podman create -p 8000:8000 --env-file=.env --name unpack-api ghcr.io/cvmfs-contrib/cvmfs-unpack-api/unpack-api:main
+```
+
+Otherwise, this package can be installed with
+
+```bash
+pip install .
+```
 
 ### Run as a Service
 
